@@ -20,18 +20,17 @@ public class Transfer implements Runnable {
 
     @Override
     public void run() {
-        synchronized (accFrom) {
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        mutex.lock();
+        try {
+            Thread.sleep(1000);
+            if (accFrom.getBalance() >= sum) {
+                accFrom.credit(sum);
+                accTo.debit(sum);
             }
-            synchronized (accTo) {
-                if (accFrom.getBalance() >= sum) {
-                    accFrom.credit(sum);
-                    accTo.debit(sum);
-                }
-            }
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        } finally {
+            mutex.unlock();
         }
     }
 }
