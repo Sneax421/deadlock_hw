@@ -1,8 +1,8 @@
 package ait.bank.model;
 
 public class Account {
-    private int accNumber;
-    private int balance;
+    private volatile int accNumber;
+    private volatile int balance;
 
     public Account(int accNumber) {
         this.accNumber = accNumber;
