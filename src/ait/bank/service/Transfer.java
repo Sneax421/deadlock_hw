@@ -4,6 +4,7 @@ import ait.bank.model.Account;
 
 
 public class Transfer implements Runnable {
+    private static Object mutex = new Object();
     private Account accFrom;
     private Account accTo;
     private int sum;
@@ -18,22 +19,16 @@ public class Transfer implements Runnable {
 
     @Override
     public void run() {
-        Account first = accFrom.getAccNumber() > accTo.getAccNumber() ? accTo : accFrom;
-        Account second = accFrom.getAccNumber() > accTo.getAccNumber() ? accFrom : accTo;
-
-        synchronized (first) {
+        synchronized (mutex) {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            synchronized (second) {
-                if (accFrom.getBalance() >= sum) {
-                    accFrom.credit(sum);
-                    accTo.debit(sum);
-                }
+            if (accFrom.getBalance() >= sum) {
+                accFrom.credit(sum);
+                accTo.debit(sum);
             }
         }
-
     }
 }
