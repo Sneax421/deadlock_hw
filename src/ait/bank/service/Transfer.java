@@ -18,8 +18,8 @@ public class Transfer implements Runnable {
 
     @Override
     public void run() {
-        Account first = accFrom.getAccNumber() < accTo.getAccNumber() ? accFrom : accTo;
-        Account second = accFrom.getAccNumber() < accTo.getAccNumber() ? accTo : accFrom;
+        Account first = accFrom.getAccNumber() > accTo.getAccNumber() ? accTo : accFrom;
+        Account second = accFrom.getAccNumber() > accTo.getAccNumber() ? accFrom : accTo;
 
         synchronized (first) {
             try {
